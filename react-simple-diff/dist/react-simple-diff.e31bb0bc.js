@@ -117,16 +117,122 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
-})({"react-dom/index.js":[function(require,module,exports) {
+})({"react-dom/diff.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.diff = diff;
+
+var _index = require("./index");
+
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function diff(dom, vnode, container) {
+  //对比节点的变化
+  var ret = diffNode(dom, vnode);
+  console.log('ret.......................', ret);
+
+  if (container) {
+    container.appendChild(ret);
+  }
+
+  return ret;
+}
+
+function diffNode(dom, vnode) {
+  var out = dom; // console.log('vnode.........', vnode);
+
+  if (vnode === undefined || vnode === null || typeof vnode === 'boolean') vnode = ''; // 如果是数字转成字符串
+
+  if (typeof vnode === 'number') vnode = String(vnode); // 如果vnode是字符串
+
+  if (typeof vnode === 'string') {
+    // console.log('vnode......................', vnode)
+    //  console.log('vnode......................', vnode.nodeType)
+    if (dom && dom.nodeType === '3') {
+      if (dom.textContent !== vnode) {
+        //更新内容
+        dom.textContent = vnode;
+      }
+    } else {
+      out = document.createTextNode(vnode);
+
+      if (dom && dom.parentNode) {
+        dom.parentNode.replaceNode(out, dom);
+      }
+    } // 创建文本节点
+
+
+    return out;
+  } //非文本
+
+
+  if (!dom) {
+    out = document.createElement(vnode.tag);
+  } // 比较子节点（dom节点和组件）
+
+
+  if (vnode.childrends && vnode.childrends.length > 0 || out.childNodes && out.childNodes.length > 0) {// 对比组件和子节点
+    // diffChildren(out, vnode.childrends);
+  }
+
+  diffAttribute(out, vnode);
+  return out;
+}
+
+function diffChildren(dom, vchildren) {}
+
+function diffAttribute(dom, vnode) {
+  var oldAttrs = {};
+  var newAttrs = vnode.attrs; // dom 是原有的节点对象   vnode 是虚拟DOM
+
+  var domAttrs = dom.attributes;
+  console.log('domAttrs..................', domAttrs);
+
+  _toConsumableArray(domAttrs).forEach(function (item) {
+    oldAttrs[item.name] = item.value;
+  }); // 比较
+  // 如果原来属性跟新的属性对比，不在新的属性中，则将其移除（属性值为underfine）
+
+
+  for (var key in oldAttrs) {
+    if (!(key in newAttrs)) {
+      (0, _index.setAttribute)(dom, key, undefined);
+    }
+  } // 更新 class='active' abc
+
+
+  for (var _key in newAttrs) {
+    if (oldAttrs[_key] !== newAttrs[_key]) {
+      (0, _index.setAttribute)(dom, _key, newAttrs[_key]);
+    }
+  }
+}
+},{"./index":"react-dom/index.js"}],"react-dom/index.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.renderComponent = renderComponent;
+exports.setAttribute = setAttribute;
 exports.default = void 0;
 
 var _component = _interopRequireDefault(require("../react/component"));
+
+var _diff = require("./diff");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -136,8 +242,9 @@ var ReactDOM = {
   render: render
 };
 
-function render(vnode, container) {
-  return container.appendChild(_render(vnode));
+function render(vnode, container, dom) {
+  // return container.appendChild(_render(vnode));
+  return (0, _diff.diff)(dom, vnode, container);
 }
 
 function renderComponent(comp) {
@@ -248,55 +355,56 @@ function _render(vnode) {
   childrens.forEach(function (node) {
     render(node, dom);
   });
-  return dom; // 设置属性
-
-  function setAttribute(dom, key, value) {
-    //将属性名className转换成class
-    if (key === 'className') {
-      key = 'class';
-    } // 如果是事件 onClick onBlur ...
+  return dom;
+} // 设置属性
 
 
-    if (/on\w+/.test(key)) {
-      //转小写
-      key = key.toLowerCase();
-      dom[key] = value || '';
-    } else if (key === 'style') {
-      // 针对属性为style的处理
-      if (!value || typeof value === 'string') {
-        dom.style.cssText = value || '';
-      } else if (value && _typeof(value) === 'object') {
-        for (var k in value) {
-          // {width: 20}
-          if (typeof value[k] === 'number') {
-            dom.style[k] = value[k] + 'px';
-          } else {
-            dom.style[k] = value[k];
-          }
+function setAttribute(dom, key, value) {
+  //将属性名className转换成class
+  if (key === 'className') {
+    key = 'class';
+  } // 如果是事件 onClick onBlur ...
+
+
+  if (/on\w+/.test(key)) {
+    //转小写
+    key = key.toLowerCase();
+    dom[key] = value || '';
+  } else if (key === 'style') {
+    // 针对属性为style的处理
+    if (!value || typeof value === 'string') {
+      dom.style.cssText = value || '';
+    } else if (value && _typeof(value) === 'object') {
+      for (var k in value) {
+        // {width: 20}
+        if (typeof value[k] === 'number') {
+          dom.style[k] = value[k] + 'px';
+        } else {
+          dom.style[k] = value[k];
         }
       }
-    } else {
-      // console.log('dom................', dom);
-      // console.log('key................', key);
-      // console.log('key in dom................', key in dom);
-      // 其他属性
-      if (key in dom) {
-        dom[key] = value || '';
-      }
+    }
+  } else {
+    // console.log('dom................', dom);
+    // console.log('key................', key);
+    // console.log('key in dom................', key in dom);
+    // 其他属性
+    if (key in dom) {
+      dom[key] = value || '';
+    }
 
-      if (value) {
-        // 更新值
-        dom.setAttribute(key, value);
-      } else {
-        dom.removeAttribute(key);
-      }
+    if (value) {
+      // 更新值
+      dom.setAttribute(key, value);
+    } else {
+      dom.removeAttribute(key);
     }
   }
 }
 
 var _default = ReactDOM;
 exports.default = _default;
-},{"../react/component":"react/component.js"}],"react/component.js":[function(require,module,exports) {
+},{"../react/component":"react/component.js","./diff":"react-dom/diff.js"}],"react/component.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -402,18 +510,18 @@ function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Re
 
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 
-// const ele = (
-//   <div className='active' title='123'>
-//     hello,<span>react</span>
-//   </div>
-// )
-// function Home(){
+var ele = _react.default.createElement("div", {
+  className: "active",
+  title: "123"
+}, "hello,", _react.default.createElement("span", null, "react")); // function Home(){
 //   return (
 //     <div>
 //       hello,<span>react</span>
 //     </div>
 //   )
 // }
+
+
 var Home = /*#__PURE__*/function (_React$Component) {
   _inherits(Home, _React$Component);
 
@@ -480,11 +588,9 @@ var title = 'active'; // 核心：组件化开发
 // 1.为什么ReactDOM.render()必须引入React？
 // 2.组件：函数组件，类组件
 // ReactDOM.render('ele', document.querySelector('#root'));
-// ReactDOM.render(ele, document.querySelector('#root'));
 
-_reactDom.default.render(_react.default.createElement(Home, {
-  name: title
-}), document.querySelector('#root')); // const ele = /*#__PURE__*/React.createElement("div", {
+_reactDom.default.render(ele, document.querySelector('#root')); // ReactDOM.render(<Home name={title} />, document.querySelector('#root'));
+// const ele = /*#__PURE__*/React.createElement("div", {
 //   className: "active",
 //   title: "123"
 // }, "hello,", /*#__PURE__*/React.createElement("span", null, "react"));
@@ -516,7 +622,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51475" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56671" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

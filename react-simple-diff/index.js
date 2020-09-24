@@ -1,11 +1,11 @@
 import React from './react';
 import ReactDOM from './react-dom';
 
-// const ele = (
-//   <div className='active' title='123'>
-//     hello,<span>react</span>
-//   </div>
-// )
+const ele = (
+  <div className='active' title='123'>
+    hello,<span>react</span>
+  </div>
+)
 
 // function Home(){
 //   return (
@@ -62,8 +62,8 @@ const title = 'active';
 // 2.组件：函数组件，类组件
 
 // ReactDOM.render('ele', document.querySelector('#root'));
-// ReactDOM.render(ele, document.querySelector('#root'));
-ReactDOM.render(<Home name={title} />, document.querySelector('#root'));
+ReactDOM.render(ele, document.querySelector('#root'));
+// ReactDOM.render(<Home name={title} />, document.querySelector('#root'));
 
 // const ele = /*#__PURE__*/React.createElement("div", {
 //   className: "active",

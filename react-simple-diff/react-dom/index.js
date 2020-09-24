@@ -1,11 +1,14 @@
 import Component from '../react/component';
+import { diff } from './diff'
 
 const ReactDOM = {
   render,
 }
 
-function render(vnode, container){
-  return container.appendChild(_render(vnode));
+function render(vnode, container, dom){
+  // return container.appendChild(_render(vnode));
+
+  return diff(dom, vnode, container);
 }
 
 export function renderComponent(comp){
@@ -111,45 +114,45 @@ function _render(vnode) {
   });
 
   return dom;
+}
 
-  // 设置属性
-  function setAttribute(dom, key, value) {
-    //将属性名className转换成class
-    if (key === 'className') {
-      key = 'class';
-    }
-    // 如果是事件 onClick onBlur ...
-    if (/on\w+/.test(key)) {
-      //转小写
-      key = key.toLowerCase();
-      dom[key] = value || '';
-    } else if (key === 'style') { // 针对属性为style的处理
-      if (!value || typeof value === 'string') {
-        dom.style.cssText = value || '';
-      } else if (value && typeof value === 'object') {
-        for (let k in value) {
-          // {width: 20}
-          if (typeof value[k] === 'number') {
-            dom.style[k] = value[k] + 'px';
-          } else {
-            dom.style[k] = value[k];
-          }
+// 设置属性
+export function setAttribute(dom, key, value) {
+  //将属性名className转换成class
+  if (key === 'className') {
+    key = 'class';
+  }
+  // 如果是事件 onClick onBlur ...
+  if (/on\w+/.test(key)) {
+    //转小写
+    key = key.toLowerCase();
+    dom[key] = value || '';
+  } else if (key === 'style') { // 针对属性为style的处理
+    if (!value || typeof value === 'string') {
+      dom.style.cssText = value || '';
+    } else if (value && typeof value === 'object') {
+      for (let k in value) {
+        // {width: 20}
+        if (typeof value[k] === 'number') {
+          dom.style[k] = value[k] + 'px';
+        } else {
+          dom.style[k] = value[k];
         }
       }
+    }
+  } else {
+    // console.log('dom................', dom);
+    // console.log('key................', key);
+    // console.log('key in dom................', key in dom);
+    // 其他属性
+    if (key in dom) {
+      dom[key] = value || ''
+    }
+    if (value) {
+      // 更新值
+      dom.setAttribute(key, value);
     } else {
-      // console.log('dom................', dom);
-      // console.log('key................', key);
-      // console.log('key in dom................', key in dom);
-      // 其他属性
-      if (key in dom) {
-        dom[key] = value || ''
-      }
-      if (value) {
-        // 更新值
-        dom.setAttribute(key, value);
-      } else {
-        dom.removeAttribute(key);
-      }
+      dom.removeAttribute(key);
     }
   }
 }
