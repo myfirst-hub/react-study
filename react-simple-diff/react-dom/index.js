@@ -7,7 +7,7 @@ const ReactDOM = {
 
 function render(vnode, container, dom){
   // return container.appendChild(_render(vnode));
-
+  console.log('vnode......................', vnode);
   return diff(dom, vnode, container);
 }
 

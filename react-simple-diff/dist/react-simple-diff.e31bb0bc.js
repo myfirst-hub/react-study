@@ -184,15 +184,71 @@ function diffNode(dom, vnode) {
   } // 比较子节点（dom节点和组件）
 
 
-  if (vnode.childrends && vnode.childrends.length > 0 || out.childNodes && out.childNodes.length > 0) {// 对比组件和子节点
-    // diffChildren(out, vnode.childrends);
+  if (vnode.childrens && vnode.childrens.length > 0 || out.childNodes && out.childNodes.length > 0) {
+    // 对比组件和子节点
+    diffChildren(out, vnode.childrens);
   }
 
   diffAttribute(out, vnode);
   return out;
 }
 
-function diffChildren(dom, vchildren) {}
+function diffChildren(dom, vchildren) {
+  var domChildren = dom.childNodes;
+  var children = [];
+  var keyed = {}; // 将有key的节点（用对象保存）和没有key的节点（用数组保存）分开
+
+  if (domChildren && domChildren.length > 0) {}
+
+  if (vchildren && vchildren.length > 0) {
+    var min = 0;
+    var childrenLen = children.length;
+
+    _toConsumableArray(vchildren).forEach(function (vchild, i) {
+      // 获取虚拟DOM中的所有key
+      var key = vchild.key;
+      var child;
+
+      if (key) {
+        // 如果有key，找到对应key值的节点
+        if (keyed[key]) {
+          child = keyed[key];
+          keyed[key] = undefined;
+        }
+      } else if (childrenLen > min) {
+        // 如果没有key，则优先找类型相同的节点
+        for (var j = min; j < childrenLen; j++) {
+          var c = children[j];
+
+          if (c) {
+            child = c;
+            children[j] = undefined;
+            if (j === childrenLen - 1) childrenLen--;
+            if (j === min) min++;
+            break;
+          }
+        }
+      } // 对比
+
+
+      child = diffNode(child, vchild); // 更新DOM
+
+      var f = domChildren[i];
+
+      if (child && child !== dom && child !== f) {
+        // 如果更新前的对应位置为空，说明此节点是新增的
+        if (!f) {
+          dom.appendChild(child); // 如果更新后的节点和更新前对应位置的下一个节点一样，
+        } else if (child === f.nextSibling) {
+          removeNode(f); // 将更新后的节点移动到正确的位置
+        } else {
+          // 注意insertBefore的用法，第一个参数是要插入的节点
+          dom.insertBefore(child, f);
+        }
+      }
+    });
+  }
+}
 
 function diffAttribute(dom, vnode) {
   var oldAttrs = {};
@@ -244,6 +300,7 @@ var ReactDOM = {
 
 function render(vnode, container, dom) {
   // return container.appendChild(_render(vnode));
+  console.log('vnode......................', vnode);
   return (0, _diff.diff)(dom, vnode, container);
 }
 
@@ -462,7 +519,9 @@ var React = {
   Component: _component.default
 };
 
-function createElement(tag, attrs) {
+function createElement(tag) {
+  var attrs = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
   for (var _len = arguments.length, childrens = new Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
     childrens[_key - 2] = arguments[_key];
   }
@@ -472,8 +531,9 @@ function createElement(tag, attrs) {
     // 外层的标签
     attrs: attrs,
     // 属性 是一个对象
-    childrens: childrens // 是一个数组
-
+    childrens: childrens,
+    // 是一个数组
+    key: attrs.key || null
   };
 }
 
@@ -584,7 +644,8 @@ var Home = /*#__PURE__*/function (_React$Component) {
 }(_react.default.Component);
 
 var title = 'active'; // 核心：组件化开发
-// 两个问题：
+
+console.log('title......................', title); // 两个问题：
 // 1.为什么ReactDOM.render()必须引入React？
 // 2.组件：函数组件，类组件
 // ReactDOM.render('ele', document.querySelector('#root'));
@@ -622,7 +683,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56671" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54772" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

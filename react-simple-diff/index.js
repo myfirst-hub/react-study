@@ -57,6 +57,8 @@ const title = 'active';
 
 // 核心：组件化开发
 
+console.log('title......................', title);
+
 // 两个问题：
 // 1.为什么ReactDOM.render()必须引入React？
 // 2.组件：函数组件，类组件

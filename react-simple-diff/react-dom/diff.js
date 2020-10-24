@@ -39,16 +39,69 @@ function diffNode(dom, vnode){
     out = document.createElement(vnode.tag);
    }
    // 比较子节点（dom节点和组件）
-   if(vnode.childrends && vnode.childrends.length > 0 || (out.childNodes && out.childNodes.length > 0)){
+   if(vnode.childrens && vnode.childrens.length > 0 || (out.childNodes && out.childNodes.length > 0)){
     // 对比组件和子节点
-    // diffChildren(out, vnode.childrends);
+    diffChildren(out, vnode.childrens);
    }
    diffAttribute(out, vnode);
    return out;
 }
 
 function diffChildren(dom, vchildren){
+  const domChildren = dom.childNodes;
+  const children = [];
+  const keyed = {};
 
+  // 将有key的节点（用对象保存）和没有key的节点（用数组保存）分开
+  if(domChildren && domChildren.length > 0){
+
+  }
+  if(vchildren && vchildren.length > 0){
+    let min = 0;
+    let childrenLen = children.length;
+    [...vchildren].forEach((vchild, i) => {
+      // 获取虚拟DOM中的所有key
+      const key = vchild.key;
+      let child;
+      if(key){
+        // 如果有key，找到对应key值的节点
+        if(keyed[key]){
+          child = keyed[key];
+          keyed[key] = undefined;
+        }
+      }else if(childrenLen > min){
+        // 如果没有key，则优先找类型相同的节点
+        for(let j = min; j < childrenLen; j++){
+          let c = children[j];
+          if(c){
+            child = c;
+            children[j] = undefined;
+            if(j === childrenLen - 1) childrenLen--;
+            if(j === min) min++;
+            break;
+          }
+        }
+      }
+      // 对比
+      child = diffNode(child, vchild);
+      // 更新DOM
+      const f = domChildren[i];
+
+      if(child && child !== dom && child !== f){
+        // 如果更新前的对应位置为空，说明此节点是新增的
+        if(!f){
+          dom.appendChild(child);
+          // 如果更新后的节点和更新前对应位置的下一个节点一样，
+        }else if(child === f.nextSibling){
+          removeNode(f);
+          // 将更新后的节点移动到正确的位置
+        }else{
+          // 注意insertBefore的用法，第一个参数是要插入的节点
+          dom.insertBefore(child, f);
+        }
+      }
+    });
+  }
 }
 
 function diffAttribute(dom, vnode){
