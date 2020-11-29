@@ -3,7 +3,9 @@ import ReactDOM from "react-dom";
 import "./index.css";
 // import App from './context/App.jsx';
 // import App from './context/counter/App.jsx';
-import App from "./portalHoc/App";
+// import App from "./portalHoc/App";
+// import App from "./hooks/UseState";
+import App from "./hooks/UseEffect";
 
 ReactDOM.render(
   <>
@@ -12,3 +14,7 @@ ReactDOM.render(
   </>,
   document.getElementById("root")
 );
+
+// setTimeout(() => {
+//   ReactDOM.unmountComponentAtNode(document.querySelector("#root"));
+// }, 10000);
