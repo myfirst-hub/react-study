@@ -5,7 +5,9 @@ import "./index.css";
 // import App from './context/counter/App.jsx';
 // import App from "./portalHoc/App";
 // import App from "./hooks/UseState";
-import App from "./hooks/UseEffect";
+// import App from "./hooks/UseEffect";
+// import App from "./hooks/UseContext";
+import App from "./hooks/UseReducer";
 
 ReactDOM.render(
   <>
