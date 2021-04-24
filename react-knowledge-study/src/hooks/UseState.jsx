@@ -18,16 +18,26 @@ import React, { Component, useState } from "react";
 // }
 
 function UseState(props) {
-  let [count, setCount] = useState(0);
+  let [countState, setCount] = useState({
+    count: 0,
+    name: 'zhansan'
+  });
   function handleClick() {
-    setCount((count) => {
-      return count + 1;
+    console.log('countState000............................', countState);
+    setCount((state) => {
+      console.log('state...............', state);
+      return {
+        ...state,
+        count: countState.count + 1,
+      }
     });
+    console.log('countState............................', countState);
   }
   return (
     <div>
-      <span>{count}</span>
+      <span>{countState.count}</span>
       <button onClick={handleClick}>add</button>
+      <div>{countState.name}</div>
     </div>
   );
 }

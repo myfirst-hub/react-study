@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 
 class ComA extends React.Component{
   handleClick = () => {
-    console.log('this.props..................', this.props)
+    console.log('this.props.ComA.................', this.props)
     //发送action
     this.props.snedAction()
   }

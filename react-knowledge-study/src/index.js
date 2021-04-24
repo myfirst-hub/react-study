@@ -7,7 +7,8 @@ import "./index.css";
 // import App from "./hooks/UseState";
 // import App from "./hooks/UseEffect";
 // import App from "./hooks/UseContext";
-import App from "./hooks/UseReducer";
+// import App from "./hooks/UseReducer";
+import App from "./baseTest/index";
 
 ReactDOM.render(
   <>
