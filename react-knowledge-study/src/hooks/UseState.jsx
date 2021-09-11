@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 // export default class UseState extends Component {
 //   state = {
@@ -17,11 +17,25 @@ import React, { useState } from "react";
 //   }
 // }
 
+let str = 1;
+
 function UseState(props) {
+  let taskInterval;
   let [countState, setCount] = useState({
     count: 0,
     name: 'zhansan'
   });
+  useEffect(() => {
+    clearInterval(taskInterval);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    taskInterval = setInterval(() => {
+      console.log('countState................', countState);
+      console.log('str................', str);
+    }, 2000)
+    return () => {
+      clearInterval(taskInterval);
+    }
+  }, []);
   function handleClick() {
     console.log('countState000............................', countState);
     setCount((state) => {
@@ -31,6 +45,7 @@ function UseState(props) {
         count: countState.count + 1,
       }
     });
+    str++;
     console.log('countState............................', countState);
   }
   return (

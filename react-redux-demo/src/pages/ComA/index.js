@@ -5,7 +5,7 @@ class ComA extends React.Component{
   handleClick = () => {
     console.log('this.props.ComA.................', this.props)
     //发送action
-    this.props.snedAction()
+    this.props.sendAction()
   }
   render(){
     return (
@@ -19,7 +19,7 @@ class ComA extends React.Component{
 */
 const mapDispatchProps = (dispatch) => {
   return {
-    snedAction: () => {
+    sendAction: () => {
       // 利用 dispatch发送一个action
       // 传递action对象，我们定义一个type属性
       dispatch({

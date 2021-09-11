@@ -34,7 +34,8 @@ class App extends React.Component {
 
   render() {
     // console.log(`${moment(1616405140000).hours()}:${moment(1616405140000).minutes()}`);
-    // console.log(`${moment(1616505140000).hours()}:${moment(1616505140000).minutes()}`);
+    console.log(`${moment(1616505140000).hours()}:${moment(1616505140000).minutes()}`);
+    console.log(`${moment(1616505140000).format('YYYY-MM-DD  HH:mm')}`);
     // console.log(moment().endOf('day'));
     // console.log(moment().subtract('days', 1).endOf('day'));
     // console.log(moment().startOf('day').valueOf());
