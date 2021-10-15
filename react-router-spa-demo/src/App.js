@@ -1,9 +1,9 @@
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 // import logo from './logo.svg';
 import "./App.css";
 
 // import { BrowserRouter as Router, Route, Link } from "react-router-dom";
-import { Route, Link } from "react-router-dom";
+import { HashRouter as Router, Route, Link }  from "react-router-dom";
 
 // 1.按需导入 react-router-dom 里面的三个组件
 // I. BrowserRouter as Router（路由器）为前面的组件取一个别名，主要的原因是 react-router 提供了两个路由的容器
@@ -31,9 +31,19 @@ import MenuLink from './component/MenuLink';
 // 另一种组件显示的方式 children
 
 class App extends Component {
+  reloadPage() {
+    console.log(this, 'this.............')
+  }
+  // 注册hash监听事件
+  componentDidMount() {
+    window.addEventListener('hashchange',this.reloadPage.bind(this));
+  }
+  componentWillUnmount() {
+    window.removeEventListener('hashchange', this.reloadPage.bind(this))
+  }
   render() {
     return (
-      <Fragment>
+      <Router>
         {/**1. 规定：必须放在路由容器 */}
         <div>
           {/**2. 组件都必须存在一个根节点 */}
@@ -71,7 +81,7 @@ class App extends Component {
             )
           }} />
         </div>
-      </Fragment>
+      </Router>
     );
   }
 }
