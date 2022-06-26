@@ -59,19 +59,20 @@ class ChildD extends Component {
       console.log('module................', module)
       this.setState(state => ({
         ...state,
-        BaseTest: module.App
+        BaseTest: module.default
       }))
     })
   }
   
   render() {
     const { BaseTest } = this.state
+    console.log('BaseTest.................', BaseTest)
     return <div> child d:
-      <Consumer>
+      {/* <Consumer>
         {
           (value) => <div>{value}</div>
         }
-      </Consumer>
+      </Consumer> */}
 
       {/* <Suspense fallback={<div>Loading...</div>}>
         <BaseTest />
@@ -95,5 +96,7 @@ class App extends Component {
     );
   }
 }
+
+console.log('App..............', typeof App)
 
 export default App;

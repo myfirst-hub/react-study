@@ -13,6 +13,10 @@ exports.reducer = (state = initState, action) => {
       return {
         count: state.count + 1
       }
+    case 'add_action_son':
+      return {
+        count: state.count + 2
+      }
     default:
       return state
   }
