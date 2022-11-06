@@ -41,6 +41,12 @@ class App extends React.Component {
     // console.log(moment().startOf('day').valueOf());
     // console.log(moment().year());
     // console.log(moment().get('month'))
+    var array = [
+      { 'dir': 'left', 'code': 97 },
+      { 'dir': 'left', 'code': 100 }
+    ];
+
+    console.log('keyby.................', lodash.keyBy(array, 'dir'))
 
     var fruits = ['Apple', 'Banana', 'Orange', 'Celery'];
     lodash.remove(fruits, function (fruit) {
@@ -48,6 +54,35 @@ class App extends React.Component {
     })
 
     console.log('fruits....................', fruits);
+
+    var arrayTest = [{ 'x': 1 }, { 'x': 2 }, { 'x': 3 }, { 'x': 1 }];
+
+    const getRepeatArray = lodash.intersectionWith(arrayTest, [{ 'x': 1 }, { 'x': 3 }], (a,b) => {
+      console.log('a............', a);
+      console.log('b............', b);
+      // return 'x';
+      return a.x === b.x;
+    });
+    console.log('getRepeatArray.............', getRepeatArray)
+
+    var users = [
+      { 'user': 'barney',  'age': 36 },
+      { 'user': 'fred',    'age': 40 },
+      { 'user': 'pebbles', 'age': 1 }
+    ];
+
+    var youngest = lodash
+      .chain(users)
+      .sortBy('age')
+      .map(function(o) {
+        return o.user + ' is ' + o.age;
+      })
+      .head()
+      .value();
+
+    console.log('youngest...................', lodash.sortBy(users, 'age'));
+
+    console.log('chain.............', lodash.chain(users).keyBy('user').mapValues('age').value())
 
     if (this.state.liked) {
       return "You liked this.";

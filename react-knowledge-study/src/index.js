@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
-import App from './context/App.jsx';
+// import App from './context/App.jsx';
 // import App from './context/counter/App.jsx';
 // import App from "./portalHoc/App";
 // import App from "./hooks/UseState";
@@ -9,7 +9,8 @@ import App from './context/App.jsx';
 // import App from "./hooks/UseContext";
 // import App from "./hooks/UseReducer";
 // import App from "./hooks/UseMemo";
-// import App from "./baseTest/index";
+// import App from "./hooks/FAQ";
+import App from "./baseTest/index";
 
 ReactDOM.render(
   <>
