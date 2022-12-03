@@ -8,8 +8,8 @@ import 'moment/locale/zh-cn';
 import { Observer, useLocalObservable } from 'mobx-react-lite';
 import { action, autorun } from 'mobx';
 
-// import AntdComponent from './Table/TableComponent';
-import AntdComponent from './Table/FormComponent';
+import AntdComponent from './Table/SortableTableComponent';
+// import AntdComponent from './Table/FormComponent';
 import Button from 'antd/es/button';
 
 moment.locale('zh-cn');
