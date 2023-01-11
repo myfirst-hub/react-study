@@ -6,9 +6,9 @@ const ReactDOM = {
 }
 
 function render(vnode, container, dom){
-  // return container.appendChild(_render(vnode));
   console.log('vnode......................', vnode);
-  return diff(dom, vnode, container);
+  return container.appendChild(_render(vnode));
+  // return diff(dom, vnode, container);
 }
 
 export function renderComponent(comp){

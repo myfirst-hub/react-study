@@ -299,9 +299,8 @@ var ReactDOM = {
 };
 
 function render(vnode, container, dom) {
-  // return container.appendChild(_render(vnode));
   console.log('vnode......................', vnode);
-  return (0, _diff.diff)(dom, vnode, container);
+  return container.appendChild(_render(vnode)); // return diff(dom, vnode, container);
 }
 
 function renderComponent(comp) {
@@ -531,9 +530,9 @@ function createElement(tag) {
     // 外层的标签
     attrs: attrs,
     // 属性 是一个对象
-    childrens: childrens,
-    // 是一个数组
-    key: attrs.key || null
+    childrens: childrens // 是一个数组
+    // key: attrs.key || null
+
   };
 }
 
@@ -685,7 +684,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "60653" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49544" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

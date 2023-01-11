@@ -61,9 +61,9 @@ const title = 'active';
 // 1.为什么ReactDOM.render()必须引入React？
 // 2.组件：函数组件，类组件
 
-ReactDOM.render('ele', document.querySelector('#root'));
+// ReactDOM.render('ele', document.querySelector('#root'));
 // ReactDOM.render(ele, document.querySelector('#root'));
-// ReactDOM.render(<Home name={title} />, document.querySelector('#root'));
+ReactDOM.render(<Home name={title} />, document.querySelector('#root'));
 
 // const ele = /*#__PURE__*/React.createElement("div", {
 //   className: "active",

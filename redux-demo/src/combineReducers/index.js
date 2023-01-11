@@ -20,7 +20,7 @@ function counter(state = 0, action) {
   }
 }
 
-console.log('children...............', children)
+// console.log('children...............', children)
 
 export default combineReducers({
   todoAction,
